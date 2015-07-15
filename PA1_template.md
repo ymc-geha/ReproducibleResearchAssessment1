@@ -1,14 +1,10 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 
-```{r loadingdata}
+
+```r
 unzip('activity.zip')
 data <- read.csv('activity.csv')
 data <- transform(data, date = as.Date(date, format="%Y-%m-%d"))
@@ -16,7 +12,8 @@ data <- transform(data, date = as.Date(date, format="%Y-%m-%d"))
 
 
 ## What is mean total number of steps taken per day?
-```{r stepsByDay, message = F}
+
+```r
 library(dplyr)
 totalStepsByDay <- data %>% group_by(date) %>% summarize(steps = sum(steps, na.rm = T))
 with(
@@ -27,17 +24,23 @@ with(
     xlab = "Total steps taken per day"
   )
 )
+```
+
+![](PA1_template_files/figure-html/stepsByDay-1.png) 
+
+```r
 mean <- mean(totalStepsByDay$steps, na.rm = T)
 median <- median(totalStepsByDay$steps, na.rm = T)
 ```
 
-The mean of the total number of steps taken per day is `r mean`.  
-The median of the total number of steps taken per day is `r median`.
+The mean of the total number of steps taken per day is 9354.2295082.  
+The median of the total number of steps taken per day is 10395.
 
 
 ## What is the average daily activity pattern?
 
-```{r averageStepsByInterval, results="hide"}
+
+```r
 averageStepsByInterval <- data %>% group_by(interval) %>% summarise(steps = mean(steps, na.rm = T))
 maxInterval <- averageStepsByInterval$interval[which.max(averageStepsByInterval$steps)]
 with(
@@ -56,7 +59,9 @@ axis(1, at=maxInterval, labels = maxInterval)
 legend("topright", lwd=1, col=c('black', 'red'), legend = c('Steps', 'Interval with maximum number of steps'))
 ```
 
-The interval identified with value `r maxInterval` is the one containing the maximum number of steps averaged across all days.
+![](PA1_template_files/figure-html/averageStepsByInterval-1.png) 
+
+The interval identified with value 835 is the one containing the maximum number of steps averaged across all days.
 
 ## Imputing missing values
 
